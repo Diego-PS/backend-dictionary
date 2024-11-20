@@ -1,10 +1,14 @@
-import { User } from 'entities'
-import { HasherInterface, UserRepositoryInterface } from 'interfaces'
+import {
+  HasherInterface,
+  JsonWebTokenInterface,
+  UserRepositoryInterface,
+} from 'interfaces'
 
 export class Signup {
   constructor(
     private userRepository: UserRepositoryInterface,
-    private hasher: HasherInterface
+    private hasher: HasherInterface,
+    private jwt: JsonWebTokenInterface
   ) {}
 
   private checkIfPasswordIsValid(password: string) {
@@ -12,7 +16,7 @@ export class Signup {
     // Since no rule for password was specified,
     // any nonempty password will be considered valid
     if (password === '') {
-      throw new Error('A password is required to sign-up')
+      throw new Error('A password is required to signup')
     }
   }
 
@@ -21,11 +25,15 @@ export class Signup {
     // Checks if email has formatting of an actual email address
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
     if (!emailRegex.test(email)) {
-      throw new Error('A valid email is required to sign-up')
+      throw new Error('A valid email is required to signup')
     }
   }
 
-  async execute(name: string, email: string, password: string): Promise<User> {
+  async execute(
+    name: string,
+    email: string,
+    password: string
+  ): Promise<{ id: string; name: string; token: string }> {
     this.checkIfEmailIsValid(email)
     this.checkIfPasswordIsValid(password)
     const hashedPassword = await this.hasher.hash(password)
@@ -34,6 +42,7 @@ export class Signup {
       email,
       password: hashedPassword,
     })
-    return user
+    const token = this.jwt.generate(user.id)
+    return { id: user.id, name: user.name, token }
   }
 }

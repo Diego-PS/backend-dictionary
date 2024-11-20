@@ -8,10 +8,19 @@
       "entities": ["src/entities/index.ts"],
       "interfaces": ["src/interfaces/index.ts"],
       "utils": ["src/utils/index.ts"],
+      "controllers": ["src/controllers/index.ts"],
+      "routes": ["src/routes/index.ts"],
+      "schemas": ["src/database/schemas/index.ts"],
+      "models": ["src/database/models/index.ts"],
+      "database-interfaces": ["src/database/interfaces/index.ts"],
+      "repositories": ["src/repositories/index.ts"],
+      "use-cases": ["src/usecases/index.ts"],
+      "middlewares": ["src/middlewares/index.ts"]
     },                                         /* Specify a set of entries that re-map imports to additional lookup locations. */
     "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
     "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
     "strict": true,                                      /* Enable all strict type-checking options. */
+    "strictNullChecks": true,
     "skipLibCheck": true,                                /* Skip type checking all .d.ts files. */
   }
 }
