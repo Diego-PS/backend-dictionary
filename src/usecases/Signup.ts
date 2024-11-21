@@ -21,11 +21,19 @@ export class Signup {
   }
 
   private checkIfEmailIsValid(email: string) {
-    // Throws an expection if email is invalid
+    // Throws an exception if email is invalid
     // Checks if email has formatting of an actual email address
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
     if (!emailRegex.test(email)) {
       throw new Error('A valid email is required to signup')
+    }
+  }
+
+  private async checkIfEmailIsInUse(email: string) {
+    // Throws an exception if email is already registered
+    const user = await this.userRepository.findByEmail(email)
+    if (user !== null) {
+      throw new Error(`A user with email ${email} is already registered`)
     }
   }
 
@@ -36,6 +44,7 @@ export class Signup {
   ): Promise<{ id: string; name: string; token: string }> {
     this.checkIfEmailIsValid(email)
     this.checkIfPasswordIsValid(password)
+    this.checkIfEmailIsInUse(email)
     const hashedPassword = await this.hasher.hash(password)
     const user = await this.userRepository.create({
       name,
