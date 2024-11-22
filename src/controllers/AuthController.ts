@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { Signup } from 'use-cases'
+import { Signin, Signup } from 'use-cases'
 
 type SignupRequest = Request<
   unknown,
@@ -11,18 +11,36 @@ type SignupRequest = Request<
   }
 >
 
-type SignupResponse = Response<{
+type SigninRequest = Request<
+  unknown,
+  unknown,
+  {
+    email: string
+    password: string
+  }
+>
+
+type AuthResponse = Response<{
   id: string
   name: string
   token: string
 }>
 
 export class AuthController {
-  constructor(private signupUseCase: Signup) {}
+  constructor(
+    private signupUseCase: Signup,
+    private signinUseCase: Signin
+  ) {}
 
-  signup = async ({ body }: SignupRequest, res: SignupResponse) => {
+  signup = async ({ body }: SignupRequest, res: AuthResponse) => {
     const { name, email, password } = body
-    const signupData = await this.signupUseCase.execute(name, email, password)
-    res.status(200).send(signupData)
+    const authData = await this.signupUseCase.execute(name, email, password)
+    res.status(200).send(authData)
+  }
+
+  signin = async ({ body }: SigninRequest, res: AuthResponse) => {
+    const { email, password } = body
+    const authData = await this.signinUseCase.execute(email, password)
+    res.status(200).send(authData)
   }
 }

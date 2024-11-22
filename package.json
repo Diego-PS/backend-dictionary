@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register ./src/index.ts",
     "main": "ts-node -r tsconfig-paths/register ./src/main.ts",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "import-dictionary": "ts-node -r tsconfig-paths/register ./scripts/import_dictionary"
   },
   "keywords": [],
   "author": "",

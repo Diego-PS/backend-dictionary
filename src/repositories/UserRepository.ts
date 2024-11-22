@@ -3,12 +3,23 @@ import { UserRepositoryInterface } from 'interfaces'
 import { UserModel } from 'models'
 
 export class UserRepository implements UserRepositoryInterface {
-  async findByEmail(email: string): Promise<User | null> {
-    const userDB = await UserModel.findOne({})
+  async findById(id: string): Promise<User | null> {
+    const userDB = await UserModel.findOne({ id })
     if (!userDB) return null
-    const id = userDB._id.toString()
     const user: User = {
       id,
+      email: userDB.email,
+      name: userDB.name,
+      password: userDB.password,
+    }
+    return user
+  }
+
+  async findByEmail(email: string): Promise<User | null> {
+    const userDB = await UserModel.findOne({ email })
+    if (!userDB) return null
+    const user: User = {
+      id: userDB.id,
       email,
       name: userDB.name,
       password: userDB.password,
