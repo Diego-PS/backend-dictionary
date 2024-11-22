@@ -3,7 +3,7 @@ import cors from 'cors'
 import { router } from 'routes'
 import mongoose from 'mongoose'
 import { errorHandler } from 'middlewares'
-import { JsonWebToken } from 'utils'
+import { Cache, JsonWebToken } from 'utils'
 
 const app = express()
 
@@ -19,5 +19,6 @@ app.listen(PORT, () => {
   JsonWebToken.setKey(
     '8c72e5969d1acd2567ef1c84eafb554c4cdcf39a06dbc2fd3eea675719505239'
   )
+  Cache.connect()
   console.log('Connected to DB')
 })

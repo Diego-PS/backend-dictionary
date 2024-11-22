@@ -1,3 +1,4 @@
+import { Metadata } from 'entities'
 import { CacheInterface } from 'interfaces'
 import { createClient } from 'redis'
 
@@ -20,5 +21,18 @@ export class Cache implements CacheInterface {
     if (valueStr === null) return null
     const value: ValueType = JSON.parse(valueStr)
     return value
+  }
+
+  async execute<KeyType, ValueType>(key: KeyType, promise: Promise<ValueType>): Promise<{ value: ValueType, metadata: Metadata }> {
+    const start = new Date().getTime()
+    const cached = await this.get<KeyType, ValueType>(key)
+    const value = cached ?? await promise
+    if (cached == null) await this.set(key, value)
+    const end = new Date().getTime()
+    const metadata: Metadata = {
+      cache: cached === null ? 'MISS' : 'HIT',
+      responseTime: end - start
+    }
+    return { value, metadata }
   }
 }
