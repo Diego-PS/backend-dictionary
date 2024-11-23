@@ -23,10 +23,10 @@ export class Cache implements CacheInterface {
     return value
   }
 
-  async execute<KeyType, ValueType>(key: KeyType, promise: Promise<ValueType>): Promise<{ value: ValueType, metadata: Metadata }> {
+  async execute<KeyType, ValueType, FuncParams>(key: KeyType, fn: (...args: FuncParams[]) => Promise<ValueType>, ...args: FuncParams[]): Promise<{ value: ValueType, metadata: Metadata }> {
     const start = new Date().getTime()
     const cached = await this.get<KeyType, ValueType>(key)
-    const value = cached ?? await promise
+    const value = cached ?? await fn(...args)
     if (cached == null) await this.set(key, value)
     const end = new Date().getTime()
     const metadata: Metadata = {

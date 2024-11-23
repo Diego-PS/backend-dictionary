@@ -13,9 +13,9 @@ export type EntriesReponseBody = {
 export class GetEntries {
   constructor(private wordRepository: WordRepositoryInterface) {}
 
-  async execute(
+  execute = async (
     query: SearchQuery
-  ): Promise<EntriesReponseBody> {
+  ): Promise<EntriesReponseBody> => {
     const { words, totalWords } = await this.wordRepository.get(query)
     const results = words.map(word => word.word)
     const totalDocs = totalWords

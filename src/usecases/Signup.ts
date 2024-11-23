@@ -29,14 +29,16 @@ export class Signup {
     }
   }
 
-  async execute(
+  execute = async (
     name: string,
     email: string,
     password: string
-  ): Promise<{ id: string; name: string; token: string }> {
+  ): Promise<{ id: string; name: string; token: string }> => {
     this.checkIfEmailIsValid(email)
     this.checkIfPasswordIsValid(password)
     const hashedPassword = await this.hasher.hash(password)
+    const foundUser = await this.userRepository.findByEmail(email)
+    if (foundUser !== null) throw new Error(`User with email ${email} is already registered`)
     const user = await this.userRepository.create({
       name,
       email,

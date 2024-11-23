@@ -2,7 +2,7 @@ import { Word } from 'entities'
 import { Request, Response } from 'express'
 import { CacheInterface } from 'interfaces'
 import { AuthenticatedRequest } from 'middlewares'
-import { EntriesReponseBody, GetEntries, ViewEntry } from 'use-cases'
+import { AddWordToFavorites, EntriesReponseBody, GetEntries, removeWordFromFavorites, ViewEntry } from 'use-cases'
 
 type GetEntriesRequest = Request<{}, {}, {}, {
   search?: string
@@ -10,14 +10,20 @@ type GetEntriesRequest = Request<{}, {}, {}, {
   limit?: string
 }>
 
-type ViewEntryRequest = AuthenticatedRequest<{ word: string }>
+type WordRequest = AuthenticatedRequest<{ word: string }>
 
-type ViewEntryResponse = Response<Word>
+type WordResponse = Response<Word>
 
 type GetEntriesResponse = Response<EntriesReponseBody>
 
 export class EntriesController {
-  constructor(private getEntriesUseCase: GetEntries, private viewEntryUseCase: ViewEntry,  private cache: CacheInterface) {}
+  constructor(
+    private getEntriesUseCase: GetEntries, 
+    private viewEntryUseCase: ViewEntry, 
+    private addWordToFavoritesUseCase: AddWordToFavorites, 
+    private removeWordFromFavoritesUseCase: removeWordFromFavorites,  
+    private cache: CacheInterface
+  ) {}
 
   private validatePositiveInteger(numeral: string): number {
     try {
@@ -34,20 +40,36 @@ export class EntriesController {
     const limit = query.limit !== undefined ? this.validatePositiveInteger(query.limit): undefined
     const search = query.search
     const searchQuery = { page, limit, search }
-    const getEntriesPromise = this.getEntriesUseCase.execute(searchQuery)
-    const { value, metadata } = await this.cache.execute(searchQuery, getEntriesPromise)
+    const { value, metadata } = await this.cache.execute(
+      searchQuery, 
+      this.getEntriesUseCase.execute, 
+      searchQuery
+    )
     res.status(200).set({
       'x-cache': metadata.cache,
       'x-response-time': metadata.responseTime
     }).send(value)
   }
 
-  viewEntry = async({ id, params: { word } }: ViewEntryRequest, res: ViewEntryResponse) => {
-    const viewEntryPromise = this.viewEntryUseCase.execute(id!, word)
-    const { value, metadata } = await this.cache.execute({ id, word }, viewEntryPromise)
+  viewEntry = async({ id, params: { word } }: WordRequest, res: WordResponse) => {
+    const { value, metadata } = await this.cache.execute(
+      { method: 'viewEntry', id, word }, 
+      this.viewEntryUseCase.execute, 
+      id!, word
+    )
     res.status(200).set({
       'x-cache': metadata.cache,
       'x-response-time': metadata.responseTime
     }).send(value)
+  }
+
+  addWordToFavorites = async ({ id, params: { word } }: WordRequest, res: WordResponse) => {
+    const wordInfo = await this.addWordToFavoritesUseCase.execute(id!, word)
+    res.status(200).send(wordInfo)
+  }
+
+  removeWordFromFavorites = async ({ id, params: { word } }: WordRequest, res: WordResponse) => {
+    const wordInfo = await this.removeWordFromFavoritesUseCase.execute(id!, word)
+    res.status(200).send(wordInfo)
   }
 }

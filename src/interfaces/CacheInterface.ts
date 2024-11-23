@@ -7,6 +7,6 @@ export interface CacheInterface {
   get<KeyType, ValueType>(key: KeyType): Promise<ValueType | null>
   // retrieves a value from cashe given a key or returns null
 
-  execute<KeyType, ValueType>(key: KeyType, promise: Promise<ValueType>): Promise<{ value: ValueType, metadata: Metadata }>
+  execute<KeyType, ValueType, FuncParams>(key: KeyType, fn: (...args: FuncParams[]) => Promise<ValueType>, ...args: FuncParams[]): Promise<{ value: ValueType, metadata: Metadata }>
   // executes cache verification and storing
 }

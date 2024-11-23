@@ -3,9 +3,9 @@ import { UserRepositoryInterface } from 'interfaces'
 export class GetUserProfile {
   constructor(private userRepository: UserRepositoryInterface) {}
 
-  async execute(
+execute = async (
     id: string
-  ): Promise<{ id: string; name: string; email: string }> {
+  ): Promise<{ id: string; name: string; email: string }> => {
     const user = await this.userRepository.findById(id)
     if (user === null)
       throw new Error(`Id ${id} does not correspond to any user`)
