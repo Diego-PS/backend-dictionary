@@ -1,6 +1,8 @@
+import { Word } from 'entities'
 import { Request, Response } from 'express'
 import { CacheInterface } from 'interfaces'
-import { EntriesReponseBody, GetEntries } from 'use-cases'
+import { AuthenticatedRequest } from 'middlewares'
+import { EntriesReponseBody, GetEntries, ViewEntry } from 'use-cases'
 
 type GetEntriesRequest = Request<{}, {}, {}, {
   search?: string
@@ -8,10 +10,14 @@ type GetEntriesRequest = Request<{}, {}, {}, {
   limit?: string
 }>
 
+type ViewEntryRequest = AuthenticatedRequest<{ word: string }>
+
+type ViewEntryResponse = Response<Word>
+
 type GetEntriesResponse = Response<EntriesReponseBody>
 
 export class EntriesController {
-  constructor(private getEntriesUseCase: GetEntries, private cache: CacheInterface) {}
+  constructor(private getEntriesUseCase: GetEntries, private viewEntryUseCase: ViewEntry,  private cache: CacheInterface) {}
 
   private validatePositiveInteger(numeral: string): number {
     try {
@@ -30,6 +36,15 @@ export class EntriesController {
     const searchQuery = { page, limit, search }
     const getEntriesPromise = this.getEntriesUseCase.execute(searchQuery)
     const { value, metadata } = await this.cache.execute(searchQuery, getEntriesPromise)
+    res.status(200).set({
+      'x-cache': metadata.cache,
+      'x-response-time': metadata.responseTime
+    }).send(value)
+  }
+
+  viewEntry = async({ id, params: { word } }: ViewEntryRequest, res: ViewEntryResponse) => {
+    const viewEntryPromise = this.viewEntryUseCase.execute(id!, word)
+    const { value, metadata } = await this.cache.execute({ id, word }, viewEntryPromise)
     res.status(200).set({
       'x-cache': metadata.cache,
       'x-response-time': metadata.responseTime

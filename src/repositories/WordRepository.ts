@@ -23,4 +23,10 @@ export class WordRepository implements WordRepositoryInterface {
     const words: Word[] = wordsDB.map(wordDB => ({ word: wordDB.word, added: wordDB.added }))
     return { words, totalWords }
   }
+
+  async getWord(word: string): Promise<Word | null> {
+    const wordDB = await WordModel.findOne({ word })
+    if (wordDB === null) return null
+    return { word: wordDB.word, added: wordDB.added }
+  }
 }

@@ -4,6 +4,6 @@ import { Schema } from 'mongoose'
 export const wordSchema = new Schema<IWord>(
   {
     word: { type: String, unique: true, required: true },
+    added: { type: Date, required: true },
   },
-  { timestamps: true }
 )

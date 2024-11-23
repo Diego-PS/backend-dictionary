@@ -1,6 +1,6 @@
-import { User } from 'entities'
+import { User, Word } from 'entities'
 import { UserRepositoryInterface } from 'interfaces'
-import { UserModel } from 'models'
+import { UserModel, WordModel } from 'models'
 
 export class UserRepository implements UserRepositoryInterface {
   async findById(id: string): Promise<User | null> {
@@ -25,6 +25,23 @@ export class UserRepository implements UserRepositoryInterface {
       password: userDB.password,
     }
     return user
+  }
+
+  async checkIfUserHasWordInHistory(id: string, word: string): Promise<boolean> {
+    const wordDB = await WordModel.findOne({ word })
+    if (wordDB === null) throw new Error(`The word ${word} does not exist in this dictionary`)
+    const userHasWordInHistory = await UserModel.findOne({
+      id,
+      history: { $elemMatch: { $eq: wordDB._id } }
+    })
+    return userHasWordInHistory !== null
+  }
+
+  async registerWordToHistory(id: string, word: string): Promise<Word> {
+    const wordDB = await WordModel.findOne({ word })
+    if (wordDB === null) throw new Error(`The word ${word} does not exist in this dictionary`)
+    await UserModel.findOneAndUpdate({ id }, { $addToSet: { history: wordDB.id }})
+    return { word: wordDB.word, added: wordDB.added }
   }
 
   async create(userInfo: Omit<User, 'id'>): Promise<User> {
