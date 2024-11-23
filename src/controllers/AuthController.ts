@@ -2,8 +2,8 @@ import { Request, Response } from 'express'
 import { Signin, Signup } from 'use-cases'
 
 type SignupRequest = Request<
-  {},
-  {},
+  undefined,
+  undefined,
   {
     name: string
     email: string
@@ -12,8 +12,8 @@ type SignupRequest = Request<
 >
 
 type SigninRequest = Request<
-  {},
-  {},
+  undefined,
+  undefined,
   {
     email: string
     password: string

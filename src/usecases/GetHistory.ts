@@ -1,5 +1,5 @@
 import { Word, PaginationQuery } from 'entities'
-import { UserRepositoryInterface} from 'interfaces'
+import { UserRepositoryInterface } from 'interfaces'
 
 export type WordsReponseBody = {
   results: Word[]
@@ -14,9 +14,13 @@ export class GetHistory {
   constructor(private userRepository: UserRepositoryInterface) {}
 
   execute = async (
-    id: string, pagination: PaginationQuery
+    id: string,
+    pagination: PaginationQuery
   ): Promise<WordsReponseBody> => {
-    const { words, totalWords } = await this.userRepository.getHistory(id, pagination)
+    const { words, totalWords } = await this.userRepository.getHistory(
+      id,
+      pagination
+    )
     const results = words
     const totalDocs = totalWords
     const limit = pagination.limit
@@ -30,7 +34,7 @@ export class GetHistory {
       page,
       totalPages,
       hasNext,
-      hasPrev
+      hasPrev,
     }
   }
 }

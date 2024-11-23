@@ -38,7 +38,8 @@ export class Signup {
     this.checkIfPasswordIsValid(password)
     const hashedPassword = await this.hasher.hash(password)
     const foundUser = await this.userRepository.findByEmail(email)
-    if (foundUser !== null) throw new Error(`User with email ${email} is already registered`)
+    if (foundUser !== null)
+      throw new Error(`User with email ${email} is already registered`)
     const user = await this.userRepository.create({
       name,
       email,

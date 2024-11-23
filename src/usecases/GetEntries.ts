@@ -13,11 +13,9 @@ export type EntriesReponseBody = {
 export class GetEntries {
   constructor(private wordRepository: WordRepositoryInterface) {}
 
-  execute = async (
-    query: SearchQuery
-  ): Promise<EntriesReponseBody> => {
+  execute = async (query: SearchQuery): Promise<EntriesReponseBody> => {
     const { words, totalWords } = await this.wordRepository.get(query)
-    const results = words.map(word => word.word)
+    const results = words.map((word) => word.word)
     const totalDocs = totalWords
     const limit = query.limit
     const page = query.page ?? 1
@@ -30,7 +28,7 @@ export class GetEntries {
       page,
       totalPages,
       hasNext,
-      hasPrev
+      hasPrev,
     }
   }
 }

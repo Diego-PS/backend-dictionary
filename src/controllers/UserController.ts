@@ -1,7 +1,12 @@
-import { Request, Response } from 'express'
+import { Response } from 'express'
 import { CacheInterface } from 'interfaces'
 import { AuthenticatedRequest } from 'middlewares'
-import { GetFavorites, GetHistory, GetUserProfile, WordsReponseBody } from 'use-cases'
+import {
+  GetFavorites,
+  GetHistory,
+  GetUserProfile,
+  WordsReponseBody,
+} from 'use-cases'
 
 type UserProfile = {
   id: string
@@ -11,10 +16,15 @@ type UserProfile = {
 
 type GetUserProfileResponse = Response<UserProfile>
 
-type GetWordsRequest = AuthenticatedRequest<{}, {}, {}, {
-  page?: string
-  limit?: string
-}>
+type GetWordsRequest = AuthenticatedRequest<
+  undefined,
+  undefined,
+  undefined,
+  {
+    page?: string
+    limit?: string
+  }
+>
 
 type GetWordsResponse = Response<WordsReponseBody>
 
@@ -40,19 +50,32 @@ export class UserController {
     { id }: AuthenticatedRequest,
     res: GetUserProfileResponse
   ) => {
-    const { value, metadata } = await this.cache.execute(id!, this.getUserProfileUseCase.execute, id!)
-    res.status(200).set({
-      'x-cache': metadata.cache,
-      'x-response-time': metadata.responseTime
-    }).send(value)
+    const { value, metadata } = await this.cache.execute(
+      id!,
+      this.getUserProfileUseCase.execute,
+      id!
+    )
+    res
+      .status(200)
+      .set({
+        'x-cache': metadata.cache,
+        'x-response-time': metadata.responseTime,
+      })
+      .send(value)
   }
 
   getHistory = async (
     { id, query }: GetWordsRequest,
     res: GetWordsResponse
   ) => {
-    const page = query.page !== undefined ? this.validatePositiveInteger(query.page) : undefined
-    const limit = query.limit !== undefined ? this.validatePositiveInteger(query.limit) : undefined
+    const page =
+      query.page !== undefined
+        ? this.validatePositiveInteger(query.page)
+        : undefined
+    const limit =
+      query.limit !== undefined
+        ? this.validatePositiveInteger(query.limit)
+        : undefined
     const result = await this.getHistoryUseCase.execute(id!, { page, limit })
     res.status(200).send(result)
   }
@@ -61,8 +84,14 @@ export class UserController {
     { id, query }: GetWordsRequest,
     res: GetWordsResponse
   ) => {
-    const page = query.page !== undefined ? this.validatePositiveInteger(query.page) : undefined
-    const limit = query.limit !== undefined ? this.validatePositiveInteger(query.limit) : undefined
+    const page =
+      query.page !== undefined
+        ? this.validatePositiveInteger(query.page)
+        : undefined
+    const limit =
+      query.limit !== undefined
+        ? this.validatePositiveInteger(query.limit)
+        : undefined
     const result = await this.getFavoritesUseCase.execute(id!, { page, limit })
     res.status(200).send(result)
   }

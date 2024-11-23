@@ -15,12 +15,20 @@ const getFavoritesUseCase = new GetFavorites(userRepository)
 
 const cache = new Cache()
 const userController = new UserController(
-  getUserProfileUseCase, 
-  getHistoryUseCase, 
+  getUserProfileUseCase,
+  getHistoryUseCase,
   getFavoritesUseCase,
   cache
 )
 
 userRoutes.get('/me', authenticate, asyncHandler(userController.getUserProfile))
-userRoutes.get('/me/history', authenticate, asyncHandler(userController.getHistory))
-userRoutes.get('/me/favorites', authenticate, asyncHandler(userController.getFavorites))
+userRoutes.get(
+  '/me/history',
+  authenticate,
+  asyncHandler(userController.getHistory)
+)
+userRoutes.get(
+  '/me/favorites',
+  authenticate,
+  asyncHandler(userController.getFavorites)
+)

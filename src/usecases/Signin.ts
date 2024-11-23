@@ -11,7 +11,7 @@ export class Signin {
     private jwt: JsonWebTokenInterface
   ) {}
 
-execute = async (
+  execute = async (
     email: string,
     password: string
   ): Promise<{ id: string; name: string; token: string }> => {

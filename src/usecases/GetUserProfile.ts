@@ -3,7 +3,7 @@ import { UserRepositoryInterface } from 'interfaces'
 export class GetUserProfile {
   constructor(private userRepository: UserRepositoryInterface) {}
 
-execute = async (
+  execute = async (
     id: string
   ): Promise<{ id: string; name: string; email: string }> => {
     const user = await this.userRepository.findById(id)
