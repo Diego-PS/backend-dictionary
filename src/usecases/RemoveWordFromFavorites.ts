@@ -9,16 +9,15 @@ export class removeWordFromFavorites {
 
   execute = async (id: string, word: string): Promise<Word> => {
     if (!/^[a-zA-Z\s]+$/.test(word)) {
-      throw new Error(`Invalid characters in word: ${word}`);
+      throw new Error(`Invalid characters in word: ${word}`)
     }
 
     const wordIsInFavorites =
-      await this.userRepository.checkIfWordIsInFavorites(id, word);
+      await this.userRepository.checkIfWordIsInFavorites(id, word)
     if (!wordIsInFavorites)
-      throw new Error(`The word ${word} is not in favorites`);
+      throw new Error(`The word ${word} is not in favorites`)
 
-    const wordInfo = await this.userRepository.removeWordFromFavorites(id, word);
-    return wordInfo;
-  };
+    const wordInfo = await this.userRepository.removeWordFromFavorites(id, word)
+    return wordInfo
+  }
 }
-

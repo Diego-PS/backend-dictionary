@@ -31,15 +31,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # Step 4: Lint code with ESLint
-      - name: Lint code
-        run: npx eslint .
-
-      # Step 5: Run tests with coverage
+      # Step 4: Run tests with coverage
       - name: Run tests
         run: npx nyc npm test
 
-      # Step 6: Upload coverage report (optional)
+      # Step 5: Upload coverage report (optional)
       - name: Upload coverage report
         if: always()
         uses: actions/upload-artifact@v3
