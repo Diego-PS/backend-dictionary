@@ -31,7 +31,12 @@ npm install
 npm run import-dictionary
 ```
 
-4. Run the server
+4. Run the tests
+```console
+npx nyc npm test
+```
+
+5. Run the server
 ```console
 npm run dev
 ```
