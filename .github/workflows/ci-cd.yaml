@@ -17,28 +17,26 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
-      # Step 1: Check out code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 16
 
-      # Step 3: Install dependencies
       - name: Install dependencies
         run: npm install
 
-      # Step 4: Run tests with coverage
       - name: Run tests
         run: npx nyc npm test
 
-      # Step 5: Upload coverage report (optional)
       - name: Upload coverage report
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: coverage
           path: coverage/
+       - name: Codecov
+          uses: codecov/codecov-action@v5.1.1
+            

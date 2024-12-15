@@ -1,6 +1,3 @@
-# Back-end Challenge - Dictionary
->  This is a challenge by [Coodesh](https://coodesh.com/)
-
 Pequeno sistema de visualização de dados a partir de um dicionário de palavras em inglês.
 
 ### Tecnologias
