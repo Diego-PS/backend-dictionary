@@ -4,6 +4,8 @@ Eduardo Diniz Mio
 Diego Pereira da Silva
 Jose Vinicius de Lima
 
+### Explicação
+
 Pequeno sistema de visualização de dados a partir de um dicionário de palavras em inglês.
 
 ### Tecnologias
@@ -14,6 +16,7 @@ Pequeno sistema de visualização de dados a partir de um dicionário de palavra
 - MongoDB
 - Redis
 - ESLint
+- Jest
 
 ### Instalação
 
