@@ -1,3 +1,9 @@
+### Nomes
+
+Eduardo Diniz Mio
+Diego Pereira da Silva
+Jose Vinicius de Lima
+
 Pequeno sistema de visualização de dados a partir de um dicionário de palavras em inglês.
 
 ### Tecnologias
@@ -37,6 +43,3 @@ npx nyc npm test
 ```console
 npm run dev
 ```
-
-### Link para apresentação
-https://youtu.be/II0sc6kH_m4
