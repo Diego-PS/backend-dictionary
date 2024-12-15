@@ -30,13 +30,20 @@ jobs:
 
       - name: Run tests
         run: npx nyc npm test
+        env:
+          NODE_OPTIONS: '--max-old-space-size=4096' 
 
-      - name: Upload coverage report
+      - name: Upload coverage report to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          flags: unittests
+          name: code-coverage-report
+
+      - name: Upload coverage artifact
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: coverage
           path: coverage/
-       - name: Codecov
-          uses: codecov/codecov-action@v5.1.1
-            
