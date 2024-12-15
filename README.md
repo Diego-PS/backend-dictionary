@@ -1,8 +1,8 @@
 ### Nomes
 
-Eduardo Diniz Mio
-Diego Pereira da Silva
-Jose Vinicius de Lima
+- Eduardo Diniz Mio
+- Diego Pereira da Silva
+- Jose Vinicius de Lima
 
 ### Explicação
 
