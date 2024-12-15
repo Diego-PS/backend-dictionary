@@ -1,18 +1,30 @@
 // Imports e configuração inicial
 
 import { AuthController,UserController,EntriesController } from './controllers';
-import { Signin, Signup, GetFavorites, GetHistory, GetUserProfile,WordsReponseBody, GetEntries, ViewEntry, AddWordToFavorites, removeWordFromFavorites } from './usecases';
-import { Metadata, Word } from 'entities'; 
-import { Request, Response } from 'express';
-import { CacheInterface } from 'interfaces';
 
-import { UserRepositoryInterface, WordRepositoryInterface } from './interfaces';
+import { Signin, Signup, GetFavorites, GetHistory, 
+  GetUserProfile,WordsReponseBody, GetEntries, 
+  ViewEntry, AddWordToFavorites, removeWordFromFavorites } from './usecases';
+
+import { Metadata, Word, SearchQuery,PaginationQuery } from 'entities'; 
+
+import { Request, Response } from 'express';
+
+import { CacheInterface,HasherInterface,JsonWebTokenInterface,
+   WordRepositoryInterface,UserRepositoryInterface } from 'interfaces';
 
 // Mock de dependências
-const userRepositoryMock: Partial<UserRepositoryInterface> = {
+const userRepositoryMock: jest.Mocked<UserRepositoryInterface> = {
+  findById: jest.fn(),
+  findByEmail: jest.fn(),
+  checkIfUserHasWordInHistory: jest.fn(),
+  registerWordToHistory: jest.fn(),
   checkIfWordIsInFavorites: jest.fn(),
   addWordToFavorites: jest.fn(),
   removeWordFromFavorites: jest.fn(),
+  getHistory: jest.fn(),
+  getFavorites: jest.fn(),
+  create: jest.fn(),
 };
 
 const wordRepositoryMock: Partial<WordRepositoryInterface> = {};
@@ -113,7 +125,6 @@ describe('AddWordToFavorites', () => {
 });
 
 
-// Testes para removeWordFromFavorites
 // Testes para removeWordFromFavorites
 describe('removeWordFromFavorites', () => {
   const removeWord = new removeWordFromFavorites(
@@ -288,6 +299,603 @@ describe('AuthController', () => {
     await expect(authController.signin(req as any, res as Response)).rejects.toThrow(
       'Unexpected error'
     );
+  });
+});
+
+// Teste para Signup
+
+const hasherMock: jest.Mocked<HasherInterface> = {
+  hash: jest.fn(),
+  compare: jest.fn(),
+};
+
+const jwtMock: jest.Mocked<JsonWebTokenInterface> = {
+  generate: jest.fn(),
+  verify: jest.fn(),
+};
+
+describe('Signup Use Case', () => {
+  let signup: Signup;
+  let userRepositoryMock: jest.Mocked<UserRepositoryInterface>;
+  let hasherMock: jest.Mocked<HasherInterface>;
+  let jwtMock: jest.Mocked<JsonWebTokenInterface>;
+
+  beforeEach(() => {
+    userRepositoryMock = {
+      findById: jest.fn(),
+      findByEmail: jest.fn(),
+      checkIfUserHasWordInHistory: jest.fn(),
+      registerWordToHistory: jest.fn(),
+      checkIfWordIsInFavorites: jest.fn(),
+      addWordToFavorites: jest.fn(),
+      removeWordFromFavorites: jest.fn(),
+      getHistory: jest.fn(),
+      getFavorites: jest.fn(),
+      create: jest.fn(),
+    };
+
+    hasherMock = {
+      hash: jest.fn(),
+      compare: jest.fn(),
+    };
+
+    jwtMock = {
+      generate: jest.fn(),
+      verify: jest.fn(),
+    };
+
+    signup = new Signup(userRepositoryMock, hasherMock, jwtMock);
+  });
+
+  it('should successfully register a user and return user data with a token', async () => {
+    userRepositoryMock.findByEmail.mockResolvedValue(null);
+    userRepositoryMock.create.mockResolvedValue({
+      id: '1',
+      name: 'John',
+      email: 'john@example.com',
+      password: 'hashedpassword',
+    });
+    hasherMock.hash.mockResolvedValue('hashedpassword');
+    jwtMock.generate.mockReturnValue('generated_token');
+
+    const result = await signup.execute('John', 'john@example.com', 'password123');
+
+    expect(result).toEqual({ id: '1', name: 'John', token: 'generated_token' });
+    expect(userRepositoryMock.findByEmail).toHaveBeenCalledWith('john@example.com');
+    expect(userRepositoryMock.create).toHaveBeenCalledWith({
+      name: 'John',
+      email: 'john@example.com',
+      password: 'hashedpassword',
+    });
+    expect(hasherMock.hash).toHaveBeenCalledWith('password123');
+    expect(jwtMock.generate).toHaveBeenCalledWith('1');
+  });
+
+  it('should throw an error if the email is invalid', async () => {
+    await expect(
+      signup.execute('John', 'invalid-email', 'password123')
+    ).rejects.toThrow('A valid email is required to signup');
+  });
+
+  it('should throw an error if the password is empty', async () => {
+    await expect(
+      signup.execute('John', 'john@example.com', '')
+    ).rejects.toThrow('A password is required to signup');
+  });
+
+  it('should throw an error if the user with the given email already exists', async () => {
+    userRepositoryMock.findByEmail.mockResolvedValue({
+      id: '2',
+      name: 'Existing User',
+      email: 'john@example.com',
+      password: 'hashedpassword',
+    });
+
+    await expect(
+      signup.execute('John', 'john@example.com', 'password123')
+    ).rejects.toThrow('User with email john@example.com is already registered');
+  });
+
+  it('should throw an error if the user repository fails to create a user', async () => {
+    userRepositoryMock.findByEmail.mockResolvedValue(null);
+    hasherMock.hash.mockResolvedValue('hashedpassword');
+    userRepositoryMock.create.mockRejectedValue(new Error('Database error'));
+
+    await expect(
+      signup.execute('John', 'john@example.com', 'password123')
+    ).rejects.toThrow('Database error');
+  });
+});
+
+// Testes para Signin
+
+describe('Signin Use Case', () => {
+  let signin: Signin;
+  let userRepositoryMock: jest.Mocked<UserRepositoryInterface>;
+  let hasherMock: jest.Mocked<HasherInterface>;
+  let jwtMock: jest.Mocked<JsonWebTokenInterface>;
+
+  beforeEach(() => {
+    userRepositoryMock = {
+      findById: jest.fn(),
+      findByEmail: jest.fn(),
+      checkIfUserHasWordInHistory: jest.fn(),
+      registerWordToHistory: jest.fn(),
+      checkIfWordIsInFavorites: jest.fn(),
+      addWordToFavorites: jest.fn(),
+      removeWordFromFavorites: jest.fn(),
+      getHistory: jest.fn(),
+      getFavorites: jest.fn(),
+      create: jest.fn(),
+    };
+
+    hasherMock = {
+      hash: jest.fn(),
+      compare: jest.fn(),
+    };
+
+    jwtMock = {
+      generate: jest.fn(),
+      verify: jest.fn(),
+    };
+
+    signin = new Signin(userRepositoryMock, hasherMock, jwtMock);
+  });
+
+  it('should successfully sign in a user and return user data with a token', async () => {
+    const mockUser = {
+      id: '1',
+      name: 'John',
+      email: 'john@example.com',
+      password: 'hashedpassword',
+    };
+
+    userRepositoryMock.findByEmail.mockResolvedValue(mockUser);
+    hasherMock.compare.mockResolvedValue(true);
+    jwtMock.generate.mockReturnValue('generated_token');
+
+    const result = await signin.execute('john@example.com', 'password123');
+
+    expect(result).toEqual({ id: '1', name: 'John', token: 'generated_token' });
+    expect(userRepositoryMock.findByEmail).toHaveBeenCalledWith(
+      'john@example.com'
+    );
+    expect(hasherMock.compare).toHaveBeenCalledWith(
+      'password123',
+      'hashedpassword'
+    );
+    expect(jwtMock.generate).toHaveBeenCalledWith('1');
+  });
+
+  it('should throw an error if the email does not exist', async () => {
+    userRepositoryMock.findByEmail.mockResolvedValue(null);
+
+    await expect(
+      signin.execute('nonexistent@example.com', 'password123')
+    ).rejects.toThrow('Invalid email or password');
+  });
+
+  it('should throw an error if the password does not match', async () => {
+    const mockUser = {
+      id: '1',
+      name: 'John',
+      email: 'john@example.com',
+      password: 'hashedpassword',
+    };
+  
+    userRepositoryMock.findByEmail.mockResolvedValue(mockUser);
+    hasherMock.compare.mockResolvedValue(false); // Mock password comparison as false
+  
+    await expect(
+      signin.execute('john@example.com', 'wrongpassword')
+    ).rejects.toThrow('Invalid email or password');
+  
+    expect(userRepositoryMock.findByEmail).toHaveBeenCalledWith(
+      'john@example.com'
+    );
+    expect(hasherMock.compare).toHaveBeenCalledWith(
+      'wrongpassword',
+      'hashedpassword'
+    );
+  });
+
+  it('should throw an error if the user repository fails to find a user', async () => {
+    userRepositoryMock.findByEmail.mockRejectedValue(new Error('Database error'));
+
+    await expect(
+      signin.execute('john@example.com', 'password123')
+    ).rejects.toThrow('Database error');
+  });
+});
+
+// Teste para GetEntries
+
+describe('GetEntries Use Case', () => {
+  let wordRepositoryMock: jest.Mocked<WordRepositoryInterface>;
+  let getEntries: GetEntries;
+
+  beforeEach(() => {
+    wordRepositoryMock = {
+      register: jest.fn(),
+      get: jest.fn(),
+      getWord: jest.fn(),
+    };
+    getEntries = new GetEntries(wordRepositoryMock);
+  });
+
+  it('should return the correct pagination details and results', async () => {
+    const date0: Date = new Date();
+    const date10: Date = new Date();
+    const query: SearchQuery = { limit: 2, page: 1 };
+    wordRepositoryMock.get.mockResolvedValue({
+      words: [
+        {word: 'hello0', added: date0},
+        {word: 'hello10', added: date10},
+      ],
+      totalWords: 5,
+    });
+
+    const response = await getEntries.execute(query);
+
+    expect(response).toEqual({
+      results: ['hello0', 'hello10'],
+      totalDocs: 5,
+      page: 1,
+      totalPages: 3,
+      hasNext: true,
+      hasPrev: false,
+    });
+
+    expect(wordRepositoryMock.get).toHaveBeenCalledWith(query);
+  });
+
+  it('should handle a query without pagination', async () => {
+    const date1: Date = new Date();
+    const date2: Date = new Date();
+    const date3: Date = new Date();
+
+    const query: SearchQuery = {};
+    wordRepositoryMock.get.mockResolvedValue({
+      words: [
+        {word: 'hello1', added: date1},
+        {word: 'hello2', added: date2},
+        {word: 'hello3', added: date3},
+      ],
+      totalWords: 3,
+    });
+
+    const response = await getEntries.execute(query);
+
+    expect(response).toEqual({
+      results: ['hello1', 'hello2', 'hello3'],
+      totalDocs: 3,
+      page: 1,
+      totalPages: 1,
+      hasNext: false,
+      hasPrev: false,
+    });
+
+    expect(wordRepositoryMock.get).toHaveBeenCalledWith(query);
+  });
+
+  it('should return no results for an empty query result', async () => {
+    const query: SearchQuery = { limit: 5, page: 1 };
+    wordRepositoryMock.get.mockResolvedValue({
+      words: [],
+      totalWords: 0,
+    });
+
+    const response = await getEntries.execute(query);
+
+    expect(response).toEqual({
+      results: [],
+      totalDocs: 0,
+      page: 1,
+      totalPages: 0,
+      hasNext: false,
+      hasPrev: false,
+    });
+
+    expect(wordRepositoryMock.get).toHaveBeenCalledWith(query);
+  });
+
+  it('should calculate pagination details correctly for multiple pages', async () => {
+    const date4: Date = new Date();
+    const date5: Date = new Date();
+    const date6: Date = new Date();
+    const query: SearchQuery = { limit: 3, page: 2 };
+    wordRepositoryMock.get.mockResolvedValue({
+      words: [
+        {word: 'hello4', added: date4},
+        {word: 'hello5', added: date5},
+        {word: 'hello6', added: date6},
+      ],
+      totalWords: 8,
+    });
+
+    const response = await getEntries.execute(query);
+
+    expect(response).toEqual({
+      results: ['hello4', 'hello5', 'hello6'],
+      totalDocs: 8,
+      page: 2,
+      totalPages: 3,
+      hasNext: true,
+      hasPrev: true,
+    });
+
+    expect(wordRepositoryMock.get).toHaveBeenCalledWith(query);
+  });
+});
+
+// Teste GetUserProfile
+
+describe('GetUserProfile Use Case', () => {
+  let userRepositoryMock: jest.Mocked<UserRepositoryInterface>;
+  let getUserProfile: GetUserProfile;
+
+  beforeEach(() => {
+    userRepositoryMock = {
+      findById: jest.fn(),
+      findByEmail: jest.fn(),
+      checkIfUserHasWordInHistory: jest.fn(),
+      registerWordToHistory: jest.fn(),
+      checkIfWordIsInFavorites: jest.fn(),
+      addWordToFavorites: jest.fn(),
+      removeWordFromFavorites: jest.fn(),
+      getHistory: jest.fn(),
+      getFavorites: jest.fn(),
+      create: jest.fn(),
+    };
+    getUserProfile = new GetUserProfile(userRepositoryMock);
+  });
+
+  it('should return the user profile when the user exists', async () => {
+    // Mocking the findById method with the full User object including password
+    userRepositoryMock.findById.mockResolvedValue({
+      id: '1',
+      name: 'John Doe',
+      email: 'john@example.com',
+      password: 'hashed_password', // Mocking password property as required
+    });
+
+    const response = await getUserProfile.execute('1');
+
+    expect(response).toEqual({
+      id: '1',
+      name: 'John Doe',
+      email: 'john@example.com',
+    });
+
+    expect(userRepositoryMock.findById).toHaveBeenCalledWith('1');
+  });
+
+  it('should throw an error if the user does not exist', async () => {
+    userRepositoryMock.findById.mockResolvedValue(null);
+
+    await expect(getUserProfile.execute('999')).rejects.toThrow(
+      'Id 999 does not correspond to any user'
+    );
+
+    expect(userRepositoryMock.findById).toHaveBeenCalledWith('999');
+  });
+});
+
+
+// Teste GetFavorites
+
+describe('GetFavorites Use Case', () => {
+  let userRepositoryMock: jest.Mocked<UserRepositoryInterface>;
+  let getFavorites: GetFavorites;
+
+  beforeEach(() => {
+    userRepositoryMock = {
+      findById: jest.fn(),
+      findByEmail: jest.fn(),
+      checkIfUserHasWordInHistory: jest.fn(),
+      registerWordToHistory: jest.fn(),
+      checkIfWordIsInFavorites: jest.fn(),
+      addWordToFavorites: jest.fn(),
+      removeWordFromFavorites: jest.fn(),
+      getHistory: jest.fn(),
+      getFavorites: jest.fn(),
+      create: jest.fn(),
+    };
+    getFavorites = new GetFavorites(userRepositoryMock);
+  });
+
+  it('should return user favorite words with pagination when favorites exist', async () => {
+    const mockWords: Word[] = [
+      { word: 'word1', added: new Date() },
+      { word: 'word2', added: new Date() },
+    ];
+
+    userRepositoryMock.getFavorites.mockResolvedValue({
+      words: mockWords,
+      totalWords: mockWords.length,
+    });
+
+    const pagination: PaginationQuery = { page: 1, limit: 10 };
+    const response = await getFavorites.execute('1', pagination);
+
+    expect(response).toEqual<WordsReponseBody>({
+      results: mockWords,
+      totalDocs: mockWords.length,
+      page: 1,
+      totalPages: 1,
+      hasNext: false,
+      hasPrev: false,
+    });
+
+    expect(userRepositoryMock.getFavorites).toHaveBeenCalledWith('1', pagination);
+  });
+
+  it('should return an empty favorites list when no favorites are found', async () => {
+    userRepositoryMock.getFavorites.mockResolvedValue({
+      words: [],
+      totalWords: 0,
+    });
+
+    const pagination: PaginationQuery = { page: 1, limit: 10 };
+    const response = await getFavorites.execute('1', pagination);
+
+    expect(response).toEqual<WordsReponseBody>({
+      results: [],
+      totalDocs: 0,
+      page: 1,
+      totalPages: 1,
+      hasNext: false,
+      hasPrev: false,
+    });
+
+    expect(userRepositoryMock.getFavorites).toHaveBeenCalledWith('1', pagination);
+  });
+
+  it('should handle pagination with previous page (has previous)', async () => {
+    const mockWords: Word[] = [
+      { word: 'word1', added: new Date() },
+      { word: 'word2', added: new Date() },
+      { word: 'word3', added: new Date() },
+      { word: 'word4', added: new Date() },
+    ];
+
+    userRepositoryMock.getFavorites.mockResolvedValue({
+      words: mockWords.slice(2), // mock second page
+      totalWords: mockWords.length,
+    });
+
+    const pagination: PaginationQuery = { page: 2, limit: 2 };
+    const response = await getFavorites.execute('1', pagination);
+
+    expect(response).toEqual<WordsReponseBody>({
+      results: mockWords.slice(2),
+      totalDocs: mockWords.length,
+      page: 2,
+      totalPages: 2,
+      hasNext: false,
+      hasPrev: true,
+    });
+
+    expect(userRepositoryMock.getFavorites).toHaveBeenCalledWith('1', pagination);
+  });
+
+  it('should handle case where limit is not specified in pagination', async () => {
+    const mockWords: Word[] = [
+      { word: 'word1', added: new Date() },
+      { word: 'word2', added: new Date() },
+    ];
+
+    userRepositoryMock.getFavorites.mockResolvedValue({
+      words: mockWords,
+      totalWords: mockWords.length,
+    });
+
+    const pagination: PaginationQuery = { page: 1 }; // no limit specified
+    const response = await getFavorites.execute('1', pagination);
+
+    expect(response).toEqual<WordsReponseBody>({
+      results: mockWords,
+      totalDocs: mockWords.length,
+      page: 1,
+      totalPages: 1,
+      hasNext: false,
+      hasPrev: false,
+    });
+
+    expect(userRepositoryMock.getFavorites).toHaveBeenCalledWith('1', pagination);
+  });
+});
+
+//Testes para GetHistory
+
+const mockWords: Word[] = [
+  { word: 'word1', added: new Date() },
+  { word: 'word2', added: new Date() },
+  { word: 'word3', added: new Date() },
+  { word: 'word4', added: new Date() },
+];
+
+describe('GetHistory Use Case', () => {
+  let getHistory: GetHistory;
+
+  beforeEach(() => {
+    getHistory = new GetHistory(userRepositoryMock);
+  });
+
+  it('should return paginated results', async () => {
+    userRepositoryMock.getHistory.mockResolvedValue({
+      words: mockWords.slice(0, 2),
+      totalWords: mockWords.length,
+    });
+
+    const pagination = { page: 1, limit: 2 };
+    const response = await getHistory.execute('1', pagination);
+
+    expect(response).toEqual({
+      results: mockWords.slice(0, 2),
+      totalDocs: mockWords.length,
+      page: 1,
+      totalPages: 2,
+      hasNext: true,
+      hasPrev: false,
+    });
+  });
+
+  it('should handle case with no results', async () => {
+    userRepositoryMock.getHistory.mockResolvedValue({
+      words: [],
+      totalWords: 0,
+    });
+
+    const pagination = { page: 1, limit: 2 };
+    const response = await getHistory.execute('1', pagination);
+
+    expect(response).toEqual({
+      results: [],
+      totalDocs: 0,
+      page: 1,
+      totalPages: 0,
+      hasNext: false,
+      hasPrev: false,
+    });
+  });
+
+  it('should handle case where limit is not provided', async () => {
+    userRepositoryMock.getHistory.mockResolvedValue({
+      words: mockWords,
+      totalWords: mockWords.length,
+    });
+
+    const pagination = { page: 1 };
+    const response = await getHistory.execute('1', pagination);
+
+    expect(response).toEqual({
+      results: mockWords,
+      totalDocs: mockWords.length,
+      page: 1,
+      totalPages: 1,
+      hasNext: false,
+      hasPrev: false,
+    });
+  });
+
+  it('should handle case with multiple pages and hasPrev', async () => {
+    userRepositoryMock.getHistory.mockResolvedValue({
+      words: mockWords.slice(2, 4),
+      totalWords: mockWords.length,
+    });
+
+    const pagination = { page: 2, limit: 2 };
+    const response = await getHistory.execute('1', pagination);
+
+    expect(response).toEqual({
+      results: mockWords.slice(2, 4),
+      totalDocs: mockWords.length,
+      page: 2,
+      totalPages: 2,
+      hasNext: false,
+      hasPrev: true,
+    });
   });
 });
 

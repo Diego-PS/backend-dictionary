@@ -15,11 +15,17 @@ export class Signin {
     email: string,
     password: string
   ): Promise<{ id: string; name: string; token: string }> => {
-    const user = await this.userRepository.findByEmail(email)
-    if (user === null || !this.hasher.compare(password, user.password)) {
-      throw new Error('Invalid email or password')
+    const user = await this.userRepository.findByEmail(email);
+    if (!user) {
+      throw new Error('Invalid email or password');
     }
-    const token = this.jwt.generate(user.id)
-    return { id: user.id, name: user.name, token }
-  }
+
+    const isPasswordValid = await this.hasher.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new Error('Invalid email or password');
+    }
+
+    const token = this.jwt.generate(user.id);
+    return { id: user.id, name: user.name, token };
+  };
 }
