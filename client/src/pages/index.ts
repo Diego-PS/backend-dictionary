@@ -1,0 +1,6 @@
+export * from './DictionaryPage'
+export * from './FavoritesPage'
+export * from './HistoryPage'
+export * from './SigninPage'
+export * from './SignupPage'
+export * from './WordPage'

@@ -8,7 +8,7 @@ export class Hasher implements HasherInterface {
   }
 
   async compare(message: string, hashed: string): Promise<boolean> {
-    const result = await bcrypt.compare(hashed, message)
+    const result = await bcrypt.compare(message, hashed)
     return result
   }
 }
