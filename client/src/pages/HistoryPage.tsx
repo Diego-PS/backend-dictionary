@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { api } from 'api'
 import { useAuth } from 'contetxs'
 import { Word } from 'entities'
@@ -26,7 +27,13 @@ export const HistoryPage = () => {
     <div className="flex flex-col items-center justify-center gap-5 p-5">
       <h1>History</h1>
       {history.map((word) => (
-        <p key={word.word}>{word.word}</p>
+        <div
+          key={word.word}
+          className="bg-blue-100 px-3 py-2 hover:bg-blue-200 cursor-pointer"
+          onClick={() => navigate(`/word/${word.word}`)}
+        >
+          <p>{word.word}</p>
+        </div>
       ))}
     </div>
   )

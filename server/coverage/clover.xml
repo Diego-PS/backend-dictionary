@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1734285272601" clover="3.2.0">
-  <project timestamp="1734285272601" name="All files">
+<coverage generated="1736692825579" clover="3.2.0">
+  <project timestamp="1736692825579" name="All files">
     <metrics statements="205" coveredstatements="168" conditionals="50" coveredconditionals="36" methods="56" coveredmethods="41" elements="311" coveredelements="245" complexity="0" loc="205" ncloc="205" packages="3" files="16" classes="16"/>
     <package name="controllers">
       <metrics statements="75" coveredstatements="38" conditionals="14" coveredconditionals="2" methods="24" coveredmethods="9"/>
-      <file name="AuthController.ts" path="/Users/eduardomio/Documents/Faculdade/tp_testsoft/backend-dictionary/src/controllers/AuthController.ts">
+      <file name="AuthController.ts" path="/Users/diego/Desktop/backend-dictionary/server/src/controllers/AuthController.ts">
         <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="5"/>
         <line num="29" count="2" type="stmt"/>
         <line num="31" count="1" type="stmt"/>
@@ -18,7 +18,7 @@
         <line num="43" count="4" type="stmt"/>
         <line num="44" count="1" type="stmt"/>
       </file>
-      <file name="EntriesController.ts" path="/Users/eduardomio/Documents/Faculdade/tp_testsoft/backend-dictionary/src/controllers/EntriesController.ts">
+      <file name="EntriesController.ts" path="/Users/diego/Desktop/backend-dictionary/server/src/controllers/EntriesController.ts">
         <metrics statements="31" coveredstatements="21" conditionals="5" coveredconditionals="2" methods="10" coveredmethods="4"/>
         <line num="30" count="2" type="stmt"/>
         <line num="32" count="1" type="stmt"/>
@@ -52,13 +52,13 @@
         <line num="108" count="0" type="stmt"/>
         <line num="112" count="0" type="stmt"/>
       </file>
-      <file name="MainRouteController.ts" path="/Users/eduardomio/Documents/Faculdade/tp_testsoft/backend-dictionary/src/controllers/MainRouteController.ts">
+      <file name="MainRouteController.ts" path="/Users/diego/Desktop/backend-dictionary/server/src/controllers/MainRouteController.ts">
         <metrics statements="3" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="7" count="2" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
       </file>
-      <file name="UserController.ts" path="/Users/eduardomio/Documents/Faculdade/tp_testsoft/backend-dictionary/src/controllers/UserController.ts">
+      <file name="UserController.ts" path="/Users/diego/Desktop/backend-dictionary/server/src/controllers/UserController.ts">
         <metrics statements="26" coveredstatements="1" conditionals="9" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="31" count="2" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
@@ -87,7 +87,7 @@
         <line num="95" count="0" type="stmt"/>
         <line num="96" count="0" type="stmt"/>
       </file>
-      <file name="index.ts" path="/Users/eduardomio/Documents/Faculdade/tp_testsoft/backend-dictionary/src/controllers/index.ts">
+      <file name="index.ts" path="/Users/diego/Desktop/backend-dictionary/server/src/controllers/index.ts">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
@@ -97,25 +97,25 @@
     </package>
     <package name="tests">
       <metrics statements="12" coveredstatements="12" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
-      <file name="testSetup.ts" path="/Users/eduardomio/Documents/Faculdade/tp_testsoft/backend-dictionary/src/tests/testSetup.ts">
+      <file name="testSetup.ts" path="/Users/diego/Desktop/backend-dictionary/server/src/tests/testSetup.ts">
         <metrics statements="12" coveredstatements="12" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
-        <line num="17" count="4" type="stmt"/>
-        <line num="30" count="4" type="stmt"/>
-        <line num="31" count="4" type="stmt"/>
-        <line num="32" count="4" type="stmt"/>
-        <line num="33" count="4" type="stmt"/>
-        <line num="36" count="10" type="cond" truecount="2" falsecount="0"/>
-        <line num="41" count="4" type="stmt"/>
+        <line num="13" count="4" type="stmt"/>
+        <line num="26" count="4" type="stmt"/>
+        <line num="27" count="4" type="stmt"/>
+        <line num="28" count="4" type="stmt"/>
+        <line num="29" count="4" type="stmt"/>
+        <line num="32" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="37" count="4" type="stmt"/>
+        <line num="38" count="10" type="stmt"/>
+        <line num="39" count="10" type="stmt"/>
+        <line num="40" count="10" type="stmt"/>
+        <line num="41" count="10" type="stmt"/>
         <line num="42" count="10" type="stmt"/>
-        <line num="43" count="10" type="stmt"/>
-        <line num="44" count="10" type="stmt"/>
-        <line num="45" count="10" type="stmt"/>
-        <line num="46" count="10" type="stmt"/>
       </file>
     </package>
     <package name="usecases">
       <metrics statements="118" coveredstatements="118" conditionals="34" coveredconditionals="32" methods="30" coveredmethods="30"/>
-      <file name="AddWordToFavorites.ts" path="/Users/eduardomio/Documents/Faculdade/tp_testsoft/backend-dictionary/src/usecases/AddWordToFavorites.ts">
+      <file name="AddWordToFavorites.ts" path="/Users/diego/Desktop/backend-dictionary/server/src/usecases/AddWordToFavorites.ts">
         <metrics statements="11" coveredstatements="11" conditionals="2" coveredconditionals="2" methods="3" coveredmethods="3"/>
         <line num="4" count="10" type="stmt"/>
         <line num="6" count="2" type="stmt"/>
@@ -129,7 +129,7 @@
         <line num="20" count="5" type="stmt"/>
         <line num="21" count="3" type="stmt"/>
       </file>
-      <file name="GetEntries.ts" path="/Users/eduardomio/Documents/Faculdade/tp_testsoft/backend-dictionary/src/usecases/GetEntries.ts">
+      <file name="GetEntries.ts" path="/Users/diego/Desktop/backend-dictionary/server/src/usecases/GetEntries.ts">
         <metrics statements="12" coveredstatements="12" conditionals="6" coveredconditionals="6" methods="4" coveredmethods="4"/>
         <line num="13" count="10" type="stmt"/>
         <line num="14" count="4" type="stmt"/>
@@ -144,7 +144,7 @@
         <line num="24" count="4" type="stmt"/>
         <line num="25" count="4" type="stmt"/>
       </file>
-      <file name="GetFavorites.ts" path="/Users/eduardomio/Documents/Faculdade/tp_testsoft/backend-dictionary/src/usecases/GetFavorites.ts">
+      <file name="GetFavorites.ts" path="/Users/diego/Desktop/backend-dictionary/server/src/usecases/GetFavorites.ts">
         <metrics statements="13" coveredstatements="13" conditionals="10" coveredconditionals="9" methods="3" coveredmethods="3"/>
         <line num="5" count="10" type="stmt"/>
         <line num="6" count="4" type="stmt"/>
@@ -160,7 +160,7 @@
         <line num="22" count="4" type="stmt"/>
         <line num="24" count="4" type="stmt"/>
       </file>
-      <file name="GetHistory.ts" path="/Users/eduardomio/Documents/Faculdade/tp_testsoft/backend-dictionary/src/usecases/GetHistory.ts">
+      <file name="GetHistory.ts" path="/Users/diego/Desktop/backend-dictionary/server/src/usecases/GetHistory.ts">
         <metrics statements="13" coveredstatements="13" conditionals="6" coveredconditionals="5" methods="3" coveredmethods="3"/>
         <line num="13" count="10" type="stmt"/>
         <line num="14" count="4" type="stmt"/>
@@ -176,7 +176,7 @@
         <line num="30" count="4" type="stmt"/>
         <line num="31" count="4" type="stmt"/>
       </file>
-      <file name="GetUserProfile.ts" path="/Users/eduardomio/Documents/Faculdade/tp_testsoft/backend-dictionary/src/usecases/GetUserProfile.ts">
+      <file name="GetUserProfile.ts" path="/Users/diego/Desktop/backend-dictionary/server/src/usecases/GetUserProfile.ts">
         <metrics statements="8" coveredstatements="8" conditionals="1" coveredconditionals="1" methods="3" coveredmethods="3"/>
         <line num="3" count="10" type="stmt"/>
         <line num="4" count="2" type="stmt"/>
@@ -187,7 +187,7 @@
         <line num="11" count="1" type="stmt"/>
         <line num="12" count="1" type="stmt"/>
       </file>
-      <file name="RemoveWordFromFavorites.ts" path="/Users/eduardomio/Documents/Faculdade/tp_testsoft/backend-dictionary/src/usecases/RemoveWordFromFavorites.ts">
+      <file name="RemoveWordFromFavorites.ts" path="/Users/diego/Desktop/backend-dictionary/server/src/usecases/RemoveWordFromFavorites.ts">
         <metrics statements="11" coveredstatements="11" conditionals="2" coveredconditionals="2" methods="3" coveredmethods="3"/>
         <line num="4" count="10" type="stmt"/>
         <line num="6" count="2" type="stmt"/>
@@ -201,7 +201,7 @@
         <line num="20" count="3" type="stmt"/>
         <line num="21" count="2" type="stmt"/>
       </file>
-      <file name="Signin.ts" path="/Users/eduardomio/Documents/Faculdade/tp_testsoft/backend-dictionary/src/usecases/Signin.ts">
+      <file name="Signin.ts" path="/Users/diego/Desktop/backend-dictionary/server/src/usecases/Signin.ts">
         <metrics statements="14" coveredstatements="14" conditionals="2" coveredconditionals="2" methods="3" coveredmethods="3"/>
         <line num="7" count="10" type="stmt"/>
         <line num="9" count="4" type="stmt"/>
@@ -218,7 +218,7 @@
         <line num="28" count="1" type="stmt"/>
         <line num="29" count="1" type="stmt"/>
       </file>
-      <file name="Signup.ts" path="/Users/eduardomio/Documents/Faculdade/tp_testsoft/backend-dictionary/src/usecases/Signup.ts">
+      <file name="Signup.ts" path="/Users/diego/Desktop/backend-dictionary/server/src/usecases/Signup.ts">
         <metrics statements="20" coveredstatements="20" conditionals="3" coveredconditionals="3" methods="5" coveredmethods="5"/>
         <line num="7" count="10" type="stmt"/>
         <line num="9" count="5" type="stmt"/>
@@ -241,7 +241,7 @@
         <line num="48" count="1" type="stmt"/>
         <line num="49" count="1" type="stmt"/>
       </file>
-      <file name="ViewEntry.ts" path="/Users/eduardomio/Documents/Faculdade/tp_testsoft/backend-dictionary/src/usecases/ViewEntry.ts">
+      <file name="ViewEntry.ts" path="/Users/diego/Desktop/backend-dictionary/server/src/usecases/ViewEntry.ts">
         <metrics statements="7" coveredstatements="7" conditionals="2" coveredconditionals="2" methods="3" coveredmethods="3"/>
         <line num="4" count="10" type="stmt"/>
         <line num="6" count="3" type="stmt"/>
@@ -251,7 +251,7 @@
         <line num="13" count="3" type="cond" truecount="2" falsecount="0"/>
         <line num="16" count="2" type="stmt"/>
       </file>
-      <file name="index.ts" path="/Users/eduardomio/Documents/Faculdade/tp_testsoft/backend-dictionary/src/usecases/index.ts">
+      <file name="index.ts" path="/Users/diego/Desktop/backend-dictionary/server/src/usecases/index.ts">
         <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="10" type="stmt"/>
         <line num="2" count="10" type="stmt"/>
