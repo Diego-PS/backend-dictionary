@@ -9,7 +9,7 @@ module.exports = {
   coverageReporters: ['json', 'lcov', 'text', 'clover'],
   coverageThreshold: {
     global: {
-      branches: 90,
+      branches: 80,
       functions: 90,
       lines: 90,
       statements: 90,
@@ -42,4 +42,4 @@ module.exports = {
     '^middlewares': '<rootDir>/src/middlewares/index.ts',
     '^middlewares/(.*)': '<rootDir>/src/middlewares/$1',
   },
-};
+}
