@@ -46,6 +46,12 @@ export const SigninPage = () => {
             Signin
           </button>
         </div>
+        <p
+          onClick={() => navigate('/signup')}
+          className="text-center mt-3 text-blue-500 hover:underline cursor-pointer"
+        >
+          Don't have an account? Signup now
+        </p>
       </form>
     </div>
   )
