@@ -20,6 +20,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Change working directory to server
+        run: cd server
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -27,17 +30,19 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: server
 
       - name: Run tests
         run: npx nyc npm test
+        working-directory: server
         env:
-          NODE_OPTIONS: '--max-old-space-size=4096' 
+          NODE_OPTIONS: '--max-old-space-size=4096'
 
       - name: Upload coverage report to Codecov
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage/lcov.info
+          files: ./server/coverage/lcov.info
           flags: unittests
           name: code-coverage-report
 
@@ -46,4 +51,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: coverage
-          path: coverage/
+          path: server/coverage/
