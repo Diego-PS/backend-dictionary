@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">7.69% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>1/13</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>5/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">7.69% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>1/13</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -115,25 +115,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -156,24 +156,24 @@ export type WordsReponseBody = {
 }
 &nbsp;
 export class GetHistory {
-<span class="fstat-no" title="function not covered" >  constructor(private <span class="cstat-no" title="statement not covered" >u</span>serRepository: UserRepositoryInterface)</span> {}
+  constructor(private userRepository: UserRepositoryInterface) {}
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  execute = <span class="fstat-no" title="function not covered" >async (</span></span>
+  execute = async (
     id: string,
     pagination: PaginationQuery
-  ): Promise&lt;WordsReponseBody&gt; =&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > {</span></span>
-    const { words, totalWords } = <span class="cstat-no" title="statement not covered" >await this.userRepository.getHistory(</span>
+  ): Promise&lt;WordsReponseBody&gt; =&gt; {
+    const { words, totalWords } = await this.userRepository.getHistory(
       id,
       pagination
     )
-    const results = <span class="cstat-no" title="statement not covered" >words</span>
-    const totalDocs = <span class="cstat-no" title="statement not covered" >totalWords</span>
-    const limit = <span class="cstat-no" title="statement not covered" >pagination.limit</span>
-    const page = <span class="cstat-no" title="statement not covered" >pagination.page ?? 1</span>
-    const totalPages = <span class="cstat-no" title="statement not covered" >limit === undefined ? 1 : Math.ceil(totalDocs / limit)</span>
-    const hasNext = <span class="cstat-no" title="statement not covered" >page &lt; totalPages</span>
-    const hasPrev = <span class="cstat-no" title="statement not covered" >page &gt; 1</span>
-<span class="cstat-no" title="statement not covered" >    return {</span>
+    const results = words
+    const totalDocs = totalWords
+    const limit = pagination.limit
+    const page = pagination.page ?? <span class="branch-1 cbranch-no" title="branch not covered" >1</span>
+    const totalPages = limit === undefined ? 1 : Math.ceil(totalDocs / limit)
+    const hasNext = page &lt; totalPages
+    const hasPrev = page &gt; 1
+    return {
       results,
       totalDocs,
       page,
@@ -190,7 +190,7 @@ export class GetHistory {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-12-15T16:57:29.404Z
+                at 2025-01-12T18:25:03.140Z
             </div>
         <script src="prettify.js"></script>
         <script>

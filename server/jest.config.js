@@ -1,22 +1,45 @@
-/** @type {import('ts-jest').JestConfigWithTsJest} **/
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
+  rootDir: './',
   collectCoverage: true,
-  coverageThreshold: {
-    global: {
-      branches: 70,
-      functions: 70,
-      lines: 70,
-      statements: 70,
-    },
-  },
   coverageDirectory: 'coverage',
   coverageReporters: ['json', 'lcov', 'text', 'clover'],
+  coverageThreshold: {
+    global: {
+      branches: 90,
+      functions: 90,
+      lines: 90,
+      statements: 90,
+    },
+  },
   transform: {
-    '^.+.tsx?$': ['ts-jest', {}],
+    '^.+\\.tsx?$': ['ts-jest', { tsconfig: 'tsconfig.json' }],
   },
-  env: {
-    node: true,
+  moduleNameMapper: {
+    '^entities': '<rootDir>/src/entities/index.ts',
+    '^entities/(.*)': '<rootDir>/src/entities/$1',
+    '^interfaces': '<rootDir>/src/interfaces/index.ts',
+    '^interfaces/(.*)': '<rootDir>/src/interfaces/$1',
+    '^utils': '<rootDir>/src/utils/index.ts',
+    '^utils/(.*)': '<rootDir>/src/utils/$1',
+    '^controllers': '<rootDir>/src/controllers/index.ts',
+    '^controllers/(.*)': '<rootDir>/src/controllers/$1',
+    '^routes': '<rootDir>/src/routes/index.ts',
+    '^routes/(.*)': '<rootDir>/src/routes/$1',
+    '^schemas': '<rootDir>/src/database/schemas/index.ts',
+    '^schemas/(.*)': '<rootDir>/src/database/schemas/$1',
+    '^models': '<rootDir>/src/database/models/index.ts',
+    '^models/(.*)': '<rootDir>/src/database/models/$1',
+    '^database-interfaces': '<rootDir>/src/database/interfaces/index.ts',
+    '^database-interfaces/(.*)': '<rootDir>/src/database/interfaces/$1',
+    '^repositories': '<rootDir>/src/repositories/index.ts',
+    '^repositories/(.*)': '<rootDir>/src/repositories/$1',
+    '^use-cases': '<rootDir>/src/usecases/index.ts',
+    '^use-cases/(.*)': '<rootDir>/src/usecases/$1',
+    '^middlewares': '<rootDir>/src/middlewares/index.ts',
+    '^middlewares/(.*)': '<rootDir>/src/middlewares/$1',
   },
-}
+};

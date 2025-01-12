@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">7.14% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>1/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">8.33% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>1/12</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -109,19 +109,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -144,18 +144,18 @@ export type EntriesReponseBody = {
 }
 &nbsp;
 export class GetEntries {
-<span class="fstat-no" title="function not covered" >  constructor(private <span class="cstat-no" title="statement not covered" >w</span>ordRepository: WordRepositoryInterface)</span> {}
+  constructor(private wordRepository: WordRepositoryInterface) {}
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  execute = <span class="fstat-no" title="function not covered" >async (q</span>uery: SearchQuery): Promise&lt;EntriesReponseBody&gt; =&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > {</span></span></span>
-    const { words, totalWords } = <span class="cstat-no" title="statement not covered" >await this.wordRepository.get(query)</span>
-    const results = <span class="cstat-no" title="statement not covered" >words.map(<span class="fstat-no" title="function not covered" >(w</span>ord) =&gt; <span class="cstat-no" title="statement not covered" >word.word)</span></span>
-    const totalDocs = <span class="cstat-no" title="statement not covered" >totalWords</span>
-    const limit = <span class="cstat-no" title="statement not covered" >query.limit</span>
-    const page = <span class="cstat-no" title="statement not covered" >query.page ?? 1</span>
-    const totalPages = <span class="cstat-no" title="statement not covered" >limit === undefined ? 1 : Math.ceil(totalDocs / limit)</span>
-    const hasNext = <span class="cstat-no" title="statement not covered" >page &lt; totalPages</span>
-    const hasPrev = <span class="cstat-no" title="statement not covered" >page &gt; 1</span>
-<span class="cstat-no" title="statement not covered" >    return {</span>
+  execute = async (query: SearchQuery): Promise&lt;EntriesReponseBody&gt; =&gt; {
+    const { words, totalWords } = await this.wordRepository.get(query)
+    const results = words.map((word) =&gt; word.word)
+    const totalDocs = totalWords
+    const limit = query.limit
+    const page = query.page ?? 1
+    const totalPages = limit === undefined ? 1 : Math.ceil(totalDocs / limit)
+    const hasNext = page &lt; totalPages
+    const hasPrev = page &gt; 1
+    return {
       results,
       totalDocs,
       page,
@@ -172,7 +172,7 @@ export class GetEntries {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-12-15T16:57:29.404Z
+                at 2025-01-12T18:25:03.140Z
             </div>
         <script src="prettify.js"></script>
         <script>
