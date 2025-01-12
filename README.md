@@ -21,6 +21,9 @@ Pequeno sistema de visualização de dados a partir de um dicionário de palavra
 - React
 - TailwindCSS
 
+### Apresentação
+https://youtu.be/A1UOYcBk6tk
+
 ### Instalação
 
 Pré-requisitos: Possuir Node com NPM e Docker
@@ -60,9 +63,14 @@ npm run dev
 cd ../client
 ```
 
-8. Run the client
+8. Install dependencies
+```console
+npm install
+```
+
+9. Run the client
 ```console
 npm run dev
 ````
 
-9. Visit http://localhost:5173/ to access the system
+10. Visit http://localhost:5173/ to access the system
