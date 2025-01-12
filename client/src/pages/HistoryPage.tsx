@@ -25,7 +25,6 @@ export const HistoryPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center gap-5 p-5">
-      <h1>History</h1>
       {history.map((word) => (
         <div
           key={word.word}

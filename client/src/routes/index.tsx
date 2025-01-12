@@ -7,11 +7,26 @@ import {
   WordPage,
 } from 'pages'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { Menu } from './Menu'
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <DictionaryPage />,
+    element: <Menu />,
+    children: [
+      {
+        path: '/',
+        element: <DictionaryPage />,
+      },
+      {
+        path: '/favorites',
+        element: <FavoritesPage />,
+      },
+      {
+        path: '/history',
+        element: <HistoryPage />,
+      },
+      { path: '/word/:word', element: <WordPage /> },
+    ],
   },
   {
     path: '/signin',
@@ -21,15 +36,6 @@ const router = createBrowserRouter([
     path: '/signup',
     element: <SignupPage />,
   },
-  {
-    path: '/favorites',
-    element: <FavoritesPage />,
-  },
-  {
-    path: '/history',
-    element: <HistoryPage />,
-  },
-  { path: '/word/:word', element: <WordPage /> },
 ])
 
 export const Router = () => <RouterProvider router={router} />

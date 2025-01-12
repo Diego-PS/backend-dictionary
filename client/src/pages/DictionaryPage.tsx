@@ -78,7 +78,6 @@ export const DictionaryPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center gap-5 p-5">
-      <h1>Dictionary</h1>
       <input
         type="text"
         placeholder="Search words"
