@@ -8,7 +8,9 @@
     "main": "ts-node -r tsconfig-paths/register ./src/main.ts",
     "lint": "eslint .",
     "import-dictionary": "ts-node -r tsconfig-paths/register ./scripts/import_dictionary",
-    "test": "jest"
+    "test": "jest",
+    "test:unit": "jest unit",
+    "test:int": "dotenv -e .env.test -- ./scripts/run-integration.sh"
   },
   "keywords": [],
   "author": "",
